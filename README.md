@@ -6,7 +6,7 @@ Script to fetch and build WildFly Ladybird branch (Elytron integration).
 
 Just run the [scripts/prepareLadybird.sh](scripts/prepareLadybird.sh).
 
-It downloads all and builds all necessary projects. The SNAPSHOT versions 
+It downloads and builds all necessary projects. The SNAPSHOT versions 
 are then provided in the subsequent build steps (depending projects).
 
 ```bash
