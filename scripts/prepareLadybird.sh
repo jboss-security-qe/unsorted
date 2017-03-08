@@ -34,9 +34,8 @@ VERSION_ELY=$(fetchAndBuild wildfly-elytron git@github.com:wildfly-security/wild
 VERSION_ELYWEB=$(fetchAndBuild elytron-web git@github.com:wildfly-security/elytron-web.git master -Dversion.org.wildfly.security.elytron=$VERSION_ELY)
 VERSION_ELYTOOL=$(fetchAndBuild wildfly-elytron-tool git@github.com:wildfly-security/wildfly-elytron-tool.git master -Dversion..elytron=$VERSION_ELY)
 VERSION_WFCORE=$(fetchAndBuild wildfly-core git@github.com:wildfly-security-incubator/wildfly-core.git ladybird -Dversion.org.wildfly.security.elytron=$VERSION_ELY -Dversion.org.wildfly.security.elytron.tool=$VERSION_ELYTOOL -Dversion.org.wildfly.security.elytron-web.undertow-server=$VERSION_ELYWEB)
-VERSION_ELYSUBSYSTEM=$(fetchAndBuild elytron-subsystem git@github.com:wildfly-security/elytron-subsystem.git master -Dversion.elytron=$VERSION_ELY -Dversion.wildfly.core=$VERSION_WFCORE)
-VERSION_WFLY=$(fetchAndBuild wildfly git@github.com:wildfly-security-incubator/wildfly.git ladybird -Dversion.org.wildfly.security.elytron-subsystem=$VERSION_ELYSUBSYSTEM -Dversion.org.wildfly.core=$VERSION_WFCORE -Dversion.org.wildfly.security.elytron-web.undertow-server=$VERSION_ELYWEB)
+VERSION_WFLY=$(fetchAndBuild wildfly git@github.com:wildfly-security-incubator/wildfly.git ladybird Dversion.org.wildfly.core=$VERSION_WFCORE)
 
 echo "To rebuild the wildfly (ladybird) use:"
-echo "  mvn clean install -DskipTests -Dcheckstyle.skip -Denforcer.skip -Dversion.org.wildfly.security.elytron-subsystem=$VERSION_ELYSUBSYSTEM -Dversion.org.wildfly.core=$VERSION_WFCORE -Dversion.org.wildfly.security.elytron-web.undertow-server=$VERSION_ELYWEB"
+echo "  mvn clean install -DskipTests -Dcheckstyle.skip -Denforcer.skip -Dversion.org.wildfly.core=$VERSION_WFCORE"
 echo
