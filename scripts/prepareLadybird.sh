@@ -8,6 +8,7 @@ fetchAndBuild () {
   local BRANCH=$3
   shift 3
 
+  echo "Project $PROJECT is to be processed. Find details in the '$PROJECT.log' file" >&2
   test -d $PROJECT
   local PROJECT_EXIST=$?
   if [ $PROJECT_EXIST -ne 0 ]; then
