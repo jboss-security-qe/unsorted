@@ -26,7 +26,10 @@ fetchAndBuild () {
     fi
     # updating versions
     for SETVERSION in "$@"; do
-      IFS== read PROPERTY NEWVERSION <<< $SETVERSION
+      PROPERTY=$(echo $SETVERSION | cut -f1 -d=)
+      NEWVERSION=$(echo $SETVERSION | cut -f2 -d=)
+      echo "Updating project $PROJECT property version:" >&2
+      echo "  -DnewVersion=$NEWVERSION -Dproperty=$PROPERTY" >&2
       mvn versions:update-property -DallowSnapshots=true -DnewVersion=$NEWVERSION -Dproperty=$PROPERTY  2>&1 | tee -a $BUILD_LOG >&2
     done
     # deploy
