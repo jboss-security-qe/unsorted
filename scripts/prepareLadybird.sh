@@ -26,16 +26,16 @@ fetchAndBuild () {
     fi
     # updating versions
     for SETVERSION in "$@"; do
+      echo "Updating project $PROJECT property version: $SETVERSION" >&2
       PROPERTY=$(echo $SETVERSION | cut -f1 -d=)
       NEWVERSION=$(echo $SETVERSION | cut -f2 -d=)
-      echo "Updating project $PROJECT property version:" >&2
-      echo "  -DnewVersion=$NEWVERSION -Dproperty=$PROPERTY" >&2
-      mvn versions:update-property -DallowSnapshots=true -DnewVersion=$NEWVERSION -Dproperty=$PROPERTY  2>&1 | tee -a $BUILD_LOG >&2
+      sed -e "s/<$PROPERTY>[^<]*<\/$PROPERTY>/<$PROPERTY>$NEWVERSION<\/$PROPERTY>/" -i pom.xml >&2
+      # mvn versions:update-property -DallowSnapshots=true -DnewVersion=$NEWVERSION -Dproperty=$PROPERTY  2>&1 | tee -a $BUILD_LOG >&2
     done
     # deploy
     echo "Building $PROJECT ..."  | tee -a $BUILD_LOG >&2
-    mvn clean source:jar install -DskipTests -Dcheckstyle.skip -Denforcer.skip  2>&1 | tee -a $BUILD_LOG >&2
-    local PROJECT_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version 2>/dev/null |grep -Ev '(^\[|Download\w+:)')
+    mvn clean install -nsu -DskipTests -Dcheckstyle.skip -Denforcer.skip  2>&1 | tee -a $BUILD_LOG >&2
+    local PROJECT_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -nsu -Dexpression=project.version 2>/dev/null |grep -Ev '(^\[|Download\w+:)')
     echo "Project $PROJECT version: $PROJECT_VERSION"  2>&1 | tee -a $BUILD_LOG >&2
     echo $PROJECT_VERSION
   popd >/dev/null
@@ -48,5 +48,5 @@ VERSION_WFCORE=$(fetchAndBuild wildfly-core wildfly-security-incubator ladybird 
 VERSION_WFLY=$(fetchAndBuild wildfly wildfly-security-incubator ladybird version.org.wildfly.core=$VERSION_WFCORE)
 
 echo "To rebuild the wildfly (ladybird) use:"
-echo "  mvn clean install -DskipTests -Dcheckstyle.skip -Denforcer.skip -Dversion.org.wildfly.core=$VERSION_WFCORE"
+echo "  mvn clean install"
 echo
